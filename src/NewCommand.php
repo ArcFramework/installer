@@ -335,9 +335,25 @@ class NewCommand extends Command
         return getcwd() . '/' . $this->slug;
     }
 
-    protected function slugify($name)
+    /**
+     * Convert the given namespace string to a slug
+     * @param string $name
+     * @return string
+     **/
+    protected function slugify($title, $separator = '-')
     {
-        return Str::snake(str_replace('/', '', $name), '-');
+        // Convert all dashes/underscores into separator
+        $flip = $separator == '-' ? '_' : '-';
+
+        $title = preg_replace('!['.preg_quote($flip).']+!u', $separator, $title);
+        // Remove all characters that are not the separator, letters, numbers, or whitespace.
+
+        $title = preg_replace('![^'.preg_quote($separator).'\pL\pN\s]+!u', '', mb_strtolower($title));
+        // Replace all separator characters and whitespace by a single separator
+
+        $title = preg_replace('!['.preg_quote($separator).'\s]+!u', $separator, $title);
+
+        return trim($title, $separator);
     }
 
     /**
