@@ -158,7 +158,7 @@ class NewCommand extends Command
 
         // Change plugin name in composer.json
         $this->composerJson = $this->pluginSlug . '/composer.json';
-        $this->replaceStringWithAnotherInFile(self::PLUGIN_NAME, $this->pluginName, $this->composerJson);
+        $this->replaceStringWithAnotherInFile(self::PLUGIN_SLUG, $this->pluginSlug, $this->composerJson);
 
         // Change plugin description in composer.json
         // TODO (pending collection of description)
