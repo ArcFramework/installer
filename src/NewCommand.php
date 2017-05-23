@@ -32,7 +32,7 @@ class NewCommand extends Command
      * The boilerplate name of the plugin
      * @var string
      **/
-    const PLUGIN_NAME = 'Plugin Name';
+    const PLUGIN_NAME = 'PluginName';
 
     /**
      * The boilerplate namespace of the plugin
@@ -158,7 +158,7 @@ class NewCommand extends Command
 
         // Change plugin name in composer.json
         $this->composerJson = $this->pluginSlug . '/composer.json';
-        $this->replaceStringWithAnotherInFile(self::PLUGIN_NAME, $this->pluginName, $this->composerJson);
+        $this->replaceStringWithAnotherInFile(self::PLUGIN_SLUG, $this->pluginSlug, $this->composerJson);
 
         // Change plugin description in composer.json
         // TODO (pending collection of description)
