@@ -32,7 +32,7 @@ class NewCommand extends Command
      * The boilerplate name of the plugin
      * @var string
      **/
-    const PLUGIN_NAME = 'Plugin Name';
+    const PLUGIN_NAME = 'PluginName';
 
     /**
      * The boilerplate namespace of the plugin
