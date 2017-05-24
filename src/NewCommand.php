@@ -113,8 +113,9 @@ class NewCommand extends Command
     /**
      * Execute the command.
      *
-     * @param  \Symfony\Component\Console\Input\InputInterface  $input
-     * @param  \Symfony\Component\Console\Output\OutputInterface  $output
+     * @param \Symfony\Component\Console\Input\InputInterface   $input  the command input stream
+     * @param \Symfony\Component\Console\Output\OutputInterface $output the output stream for any feedback
+     *
      * @return void
      */
     protected function execute(InputInterface $input, OutputInterface $output)
@@ -151,7 +152,7 @@ class NewCommand extends Command
         //get the plugin URI
         $question = new Question('Enter plugin URI (default <comment>""</comment>): ', '');
         $this->pluginUri = $questionHelper->ask($input, $this->output, $question);
-        
+
         //get the plugin description
         $question = new Question('Enter plugin description (default <comment>""</comment>): ', '');
         $this->pluginDescription = $questionHelper->ask($input, $this->output, $question);
@@ -169,9 +170,9 @@ class NewCommand extends Command
         $version = $this->getVersion($input);
 
         $this->download($zipFile = $this->makeFilename(), $version)
-             ->extract($zipFile)
-             ->rename($this->getArchiveDirectoryName(), $this->pluginSlug)
-             ->cleanUp($zipFile);
+            ->extract($zipFile)
+            ->rename($this->getArchiveDirectoryName(), $this->pluginSlug)
+            ->cleanUp($zipFile);
 
         $composer = $this->findComposer();
 
@@ -180,9 +181,12 @@ class NewCommand extends Command
         ];
 
         if ($input->getOption('no-ansi')) {
-            $commands = array_map(function ($value) {
-                return $value.' --no-ansi';
-            }, $commands);
+            $commands = array_map(
+                function ($value) {
+                    return $value.' --no-ansi';
+                },
+                $commands
+            );
         }
 
         $process = new Process(implode(' && ', $commands), $this->pluginSlug, null, null, null);
@@ -191,9 +195,11 @@ class NewCommand extends Command
             $process->setTty(true);
         }
 
-        $process->run(function ($type, $line) {
-            $this->output->write($line);
-        });
+        $process->run(
+            function ($type, $line) {
+                $this->output->write($line);
+            }
+        );
 
         // Rename plugin.php to slug
         $this->pluginFilename = $this->pluginSlug . '.php';
@@ -203,7 +209,7 @@ class NewCommand extends Command
         // Change name of plugin in plugin file
         $this->replaceStringWithAnotherInFile(self::PLUGIN_NAME,  $this->pluginName, $this->pluginFile);
 
-       // Change plugin URI in plugin file
+        // Change plugin URI in plugin file
         // TODO Collect plugin URI from user
         $this->replaceStringWithAnotherInFile(self::DEF_PLUGIN_URI, 'Plugin URI: ' . $this->pluginUri, $this->pluginFile);
 
@@ -248,8 +254,8 @@ class NewCommand extends Command
         // Change psr-4 namespace in composer.json
         $this->replaceStringWithAnotherInFile(
             addslashes(self::PLUGIN_NAMESPACE),
-            addslashes($this->pluginNamespace)
-            , $this->composerJson
+            addslashes($this->pluginNamespace),
+            $this->composerJson
         );
 
         // Change wordpress path in .env file
@@ -299,8 +305,9 @@ class NewCommand extends Command
     /**
      * Download the temporary Zip to the given file.
      *
-     * @param  string  $zipFile
-     * @param  string  $version
+     * @param string $zipFile the file to download the zip contents to
+     * @param string $version the version to download, 'develop' or 'master'
+     *
      * @return $this
      */
     protected function download($zipFile, $version = 'master')
@@ -314,7 +321,7 @@ class NewCommand extends Command
                 break;
         }
 
-        $response = (new Client)->get('https://github.com/ArcFramework/plugin/archive/'.$this->archiveName);
+        $response = (new Client())->get('https://github.com/ArcFramework/plugin/archive/'.$this->archiveName);
 
         file_put_contents($zipFile, $response->getBody());
 
@@ -324,8 +331,9 @@ class NewCommand extends Command
     /**
      * Extract the Zip file into the given directory.
      *
-     * @param  string  $zipFile
-     * @param  string  $directory
+     * @param string $zipFile   the zip archive to extract
+     * @param string $directory the location to put the contents of the zip archive
+     *
      * @return $this
      */
     protected function extract($zipFile, $directory = '.')
@@ -344,7 +352,8 @@ class NewCommand extends Command
     /**
      * Clean-up the Zip file.
      *
-     * @param  string  $zipFile
+     * @param string $zipFile the zip file to remove/clean up
+     *
      * @return $this
      */
     protected function cleanUp($zipFile)
@@ -359,7 +368,8 @@ class NewCommand extends Command
     /**
      * Get the version that should be downloaded.
      *
-     * @param  \Symfony\Component\Console\Input\InputInterface  $input
+     * @param \Symfony\Component\Console\Input\InputInterface $input the command input stream
+     *
      * @return string
      */
     protected function getVersion(InputInterface $input)
@@ -398,6 +408,9 @@ class NewCommand extends Command
     /**
      * Rename the directory
      *
+     * @param string $originalName the name of the directory to rename
+     * @param string $newName      the new name for the directory
+     *
      * @return $this
      */
     protected function rename($originalName, $newName)
@@ -406,6 +419,11 @@ class NewCommand extends Command
         return $this;
     }
 
+    /**
+     * Get the directory of the plugin files
+     *
+     * @return string
+     */
     protected function getDirectory()
     {
         return getcwd() . '/' . $this->slug;
@@ -413,7 +431,10 @@ class NewCommand extends Command
 
     /**
      * Convert the given namespace string to a slug
-     * @param string $name
+     *
+     * @param string $title     the name to convert to a slug
+     * @param string $separator the character to use to separate the slug words
+     *
      * @return string
      **/
     protected function slugify($title, $separator = '-')
@@ -434,7 +455,10 @@ class NewCommand extends Command
 
     /**
      * Output the given message to the console as a comment message
-     * @param string $message
+     *
+     * @param string $message the message to pass to output
+     *
+     * @return void
      **/
     protected function comment($message)
     {
@@ -443,7 +467,10 @@ class NewCommand extends Command
 
     /**
      * Output the given message to the console as an info message
-     * @param string $message
+     *
+     * @param string $message the message to pass to output
+     *
+     * @return void
      **/
     protected function info($message)
     {
@@ -452,8 +479,11 @@ class NewCommand extends Command
 
     /**
      * Output the given message to the console with the given class
-     * @param string $message
-     * @param string $class
+     *
+     * @param string $message the message to pass to output
+     * @param string $class   the class of message to output
+     *
+     * @return void
      **/
     protected function output($message, $class = "info")
     {
@@ -462,9 +492,12 @@ class NewCommand extends Command
 
     /**
      * Replaces all instances of the given string with another string in the file at the given path
-     * @param string $string String to be replaced
-     * @param string $another String to be replaced with
+     *
+     * @param string $string   String to be replaced
+     * @param string $another  String to be replaced with
      * @param string $filepath The full path of the file to be replaced
+     *
+     * @return void
      **/
     protected function replaceStringWithAnotherInFile($string, $another, $filepath)
     {
