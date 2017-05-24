@@ -18,42 +18,80 @@ class NewCommand extends Command
 {
     /**
      * The boilerplate directory of the plugin
+     *
      * @var string
      **/
     const PLUGIN_DIRECTORY = '~/Code/plugins/vendor/plugin-name';
 
     /**
      * The boilerplate name of the plugin file
+     *
      * @var string
      **/
     const PLUGIN_FILENAME = 'plugin-name.php';
 
     /**
      * The boilerplate name of the plugin
+     *
      * @var string
      **/
     const PLUGIN_NAME = 'My Plugin Name';
 
     /**
      * The boilerplate namespace of the plugin
+     *
      * @var string
      **/
-    
-    const PLUGIN_SLUG = 'plugin-name';
-
     const PLUGIN_NAMESPACE = 'Vendor\PluginName';
 
-    const DEF_PLUGIN_DESCRIPTION = 'Description: A description of this plugin';
+    /**
+     * The boilerplate slug/composer name of the plugin
+     *
+     * @var string
+     */
+    const PLUGIN_SLUG = 'plugin-name';
 
-    const DEF_COMPOSER_DESCRIPTION = '"description": "A description of this plugin",';
+    /**
+     * The boilerplate description in the plugin entry file
+     *
+     * @var string
+     */
+    const DEFAULT_PLUGIN_DESCRIPTION = 'Description: A description of this plugin';
 
-    const DEF_PLUGIN_URI = 'Plugin URI: http://plugin.com.au';
+    /**
+     * The boilerplate composer description
+     *
+     * @var string
+     **/
+    const DEFAULT_COMPOSER_DESCRIPTION = '"description": "A description of this plugin",';
 
-    const DEF_PLUGIN_AUTHOR = 'Author: My Name';
+    /**
+     * The boilerplate plugin URI
+     *
+     * @var string
+     **/
+    const DEFAULT_PLUGIN_URI = 'Plugin URI: http://plugin.com.au';
 
-    const DEF_COMPOSER_AUTHOR = '"name": "My Name",';
+    /**
+     * The boilerplate Author name in the plugin file
+     *
+     * @var string
+     **/
+    const DEFAULT_PLUGIN_AUTHOR = 'Author: My Name';
 
-    const DEF_PLUGIN_AUTHOR_URI = 'Author URI: http://myname.com.au';
+    /**
+     * The boilerplate composer author
+     *
+     * @var string
+     **/
+    const DEFAULT_COMPOSER_AUTHOR = '"name": "My Name",';
+
+    /**
+     * The boilerplate plugin author URI
+     *
+     * @var string
+     **/
+    const DEFAULT_PLUGIN_AUTHOR_URI = 'Author URI: http://myname.com.au';
 
     protected $archiveName;
     protected $pluginName;
