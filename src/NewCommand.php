@@ -21,35 +21,35 @@ class NewCommand extends Command
      *
      * @var string
      **/
-    const PLUGIN_DIRECTORY = '~/Code/plugins/vendor/plugin-name';
+    const DEFAULT_PLUGIN_DIRECTORY = '~/Code/plugins/vendor/plugin-name';
 
     /**
      * The boilerplate name of the plugin file
      *
      * @var string
      **/
-    const PLUGIN_FILENAME = 'plugin-name.php';
+    const DEFAULT_PLUGIN_FILENAME = 'plugin-name.php';
 
     /**
      * The boilerplate name of the plugin
      *
      * @var string
      **/
-    const PLUGIN_NAME = 'My Plugin Name';
+    const DEAFAULT_PLUGIN_NAME = 'My Plugin Name';
 
     /**
      * The boilerplate namespace of the plugin
      *
      * @var string
      **/
-    const PLUGIN_NAMESPACE = 'Vendor\PluginName';
+    const DEFAULT_PLUGIN_NAMESPACE = 'Vendor\PluginName';
 
     /**
      * The boilerplate slug/composer name of the plugin
      *
      * @var string
      */
-    const PLUGIN_SLUG = 'plugin-name';
+    const DEFAULT_PLUGIN_SLUG = 'plugin-name';
 
     /**
      * The boilerplate description in the plugin entry file
@@ -204,56 +204,56 @@ class NewCommand extends Command
         // Rename plugin.php to slug
         $this->pluginFilename = $this->pluginSlug . '.php';
         $this->pluginFile = $this->pluginSlug . '/' . $this->pluginFilename;
-        $this->rename($this->pluginSlug . '/' . self::PLUGIN_FILENAME, $this->pluginFile);
+        $this->rename($this->pluginSlug . '/' . self::DEFAULT_PLUGIN_FILENAME, $this->pluginFile);
 
         // Change name of plugin in plugin file
-        $this->replaceStringWithAnotherInFile(self::PLUGIN_NAME,  $this->pluginName, $this->pluginFile);
+        $this->replaceStringWithAnotherInFile(self::DEFAULT_PLUGIN_NAME,  $this->pluginName, $this->pluginFile);
 
         // Change plugin URI in plugin file
         // TODO Collect plugin URI from user
-        $this->replaceStringWithAnotherInFile(self::DEF_PLUGIN_URI, 'Plugin URI: ' . $this->pluginUri, $this->pluginFile);
+        $this->replaceStringWithAnotherInFile(self::DEFAULT_PLUGIN_URI, 'Plugin URI: ' . $this->pluginUri, $this->pluginFile);
 
         // Change plugin description in plugin file
         // TODO Collect plugin description from user
-        $this->replaceStringWithAnotherInFile(self::DEF_PLUGIN_DESCRIPTION, 'Description: ' . $this->pluginDescription, $this->pluginFile);
+        $this->replaceStringWithAnotherInFile(self::DEFAULT_PLUGIN_DESCRIPTION, 'Description: ' . $this->pluginDescription, $this->pluginFile);
 
         // Change plugin author in plugin file
         // TODO Collect plugin author from user
-        $this->replaceStringWithAnotherInFile(self::DEF_PLUGIN_AUTHOR, 'Author: ' . $this->pluginAuthor, $this->pluginFile);
+        $this->replaceStringWithAnotherInFile(self::DEFAULT_PLUGIN_AUTHOR, 'Author: ' . $this->pluginAuthor, $this->pluginFile);
 
         // Change plugin author URI in plugin file
         // TODO Collect plugin author URI from user
-        $this->replaceStringWithAnotherInFile(self::DEF_PLUGIN_AUTHOR_URI, 'Author URI: ' . $this->pluginAuthorUri, $this->pluginFile);
+        $this->replaceStringWithAnotherInFile(self::DEFAULT_PLUGIN_AUTHOR_URI, 'Author URI: ' . $this->pluginAuthorUri, $this->pluginFile);
 
         // Change plugin class namespace in plugin file
-        $this->replaceStringWithAnotherInFile(self::PLUGIN_NAMESPACE, $this->pluginNamespace, $this->pluginFile);
+        $this->replaceStringWithAnotherInFile(self::DEFAULT_PLUGIN_NAMESPACE, $this->pluginNamespace, $this->pluginFile);
 
         // Change namespace in plugin class
         $this->pluginClass = $this->pluginSlug . '/app/Plugin.php';
-        $this->replaceStringWithAnotherInFile(self::PLUGIN_NAMESPACE, $this->pluginNamespace, $this->pluginClass);
+        $this->replaceStringWithAnotherInFile(self::DEFAULT_PLUGIN_NAMESPACE, $this->pluginNamespace, $this->pluginClass);
 
         // Change vendor name in composer.json
         // TODO Collect vendor name from user
 
         // Change plugin name in composer.json
         $this->composerJson = $this->pluginSlug . '/composer.json';
-        $this->replaceStringWithAnotherInFile(self::PLUGIN_SLUG, $this->pluginSlug, $this->composerJson);
+        $this->replaceStringWithAnotherInFile(self::DEFAULT_PLUGIN_SLUG, $this->pluginSlug, $this->composerJson);
 
         // Change plugin description in composer.json
         // TODO (pending collection of description)
-        $this->replaceStringWithAnotherInFile(self::DEF_COMPOSER_DESCRIPTION, '"description": "' . $this->pluginDescription . '",', $this->composerJson);
+        $this->replaceStringWithAnotherInFile(self::DEFAULT_COMPOSER_DESCRIPTION, '"description": "' . $this->pluginDescription . '",', $this->composerJson);
 
         // Change author name in plugin description
         // TODO (pending collection of author name)
         // "name": "My Name",
-        $this->replaceStringWithAnotherInFile(self::DEF_COMPOSER_AUTHOR, '"name": "' . $this->pluginAuthor . '",', $this->composerJson);
+        $this->replaceStringWithAnotherInFile(self::DEFAULT_COMPOSER_AUTHOR, '"name": "' . $this->pluginAuthor . '",', $this->composerJson);
 
         // Change author email in plugin description
         // TODO Collect author email from user
 
         // Change psr-4 namespace in composer.json
         $this->replaceStringWithAnotherInFile(
-            addslashes(self::PLUGIN_NAMESPACE),
+            addslashes(self::DEFAULT_PLUGIN_NAMESPACE),
             addslashes($this->pluginNamespace),
             $this->composerJson
         );
@@ -263,19 +263,19 @@ class NewCommand extends Command
 
         // Change plugin path in .env file
         $this->envFile = $this->pluginSlug . '/.env';
-        $this->replaceStringWithAnotherInFile(self::PLUGIN_DIRECTORY, realpath($this->pluginSlug), $this->envFile);
+        $this->replaceStringWithAnotherInFile(self::DEFAULT_PLUGIN_DIRECTORY, realpath($this->pluginSlug), $this->envFile);
 
         // Change plugin filename in .env file
-        $this->replaceStringWithAnotherInFile(self::PLUGIN_FILENAME, $this->pluginFilename, $this->envFile);
+        $this->replaceStringWithAnotherInFile(self::DEFAULT_PLUGIN_FILENAME, $this->pluginFilename, $this->envFile);
 
         // Change plugin path in tests/bootstrap
-        $this->replaceStringWithAnotherInFile(self::PLUGIN_FILENAME, $this->pluginFilename, $this->pluginSlug . '/tests/bootstrap.php');
+        $this->replaceStringWithAnotherInFile(self::DEFAULT_PLUGIN_FILENAME, $this->pluginFilename, $this->pluginSlug . '/tests/bootstrap.php');
 
         // Change plugin namespace in test case constructor
-        $this->replaceStringWithAnotherInFile(self::PLUGIN_NAMESPACE, $this->pluginNamespace, $this->pluginSlug . '/tests/TestCase.php');
+        $this->replaceStringWithAnotherInFile(self::DEFAULT_PLUGIN_NAMESPACE, $this->pluginNamespace, $this->pluginSlug . '/tests/TestCase.php');
 
         // Change plugin namespace for Arc CLI
-        $this->replaceStringWithAnotherInFile(self::PLUGIN_NAMESPACE, $this->pluginNamespace, $this->pluginSlug . '/arc');
+        $this->replaceStringWithAnotherInFile(self::DEFAULT_PLUGIN_NAMESPACE, $this->pluginNamespace, $this->pluginSlug . '/arc');
 
         $this->info('Plugin ready! Build something adequate!');
     }
