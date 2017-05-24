@@ -2,92 +2,90 @@
 
 namespace Arc\Installer\Console;
 
-use ZipArchive;
-use RuntimeException;
 use GuzzleHttp\Client;
-use Illuminate\Support\Str;
-use Symfony\Component\Process\Process;
+use RuntimeException;
 use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Console\Input\InputOption;
-use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Question\Question;
+use Symfony\Component\Process\Process;
+use ZipArchive;
 
 class NewCommand extends Command
 {
     /**
-     * The boilerplate directory of the plugin
+     * The boilerplate directory of the plugin.
      *
      * @var string
      **/
     const DEFAULT_PLUGIN_DIRECTORY = '~/Code/plugins/vendor/plugin-name';
 
     /**
-     * The boilerplate name of the plugin file
+     * The boilerplate name of the plugin file.
      *
      * @var string
      **/
     const DEFAULT_PLUGIN_FILENAME = 'plugin-name.php';
 
     /**
-     * The boilerplate name of the plugin
+     * The boilerplate name of the plugin.
      *
      * @var string
      **/
     const DEAFAULT_PLUGIN_NAME = 'My Plugin Name';
 
     /**
-     * The boilerplate namespace of the plugin
+     * The boilerplate namespace of the plugin.
      *
      * @var string
      **/
     const DEFAULT_PLUGIN_NAMESPACE = 'Vendor\PluginName';
 
     /**
-     * The boilerplate slug/composer name of the plugin
+     * The boilerplate slug/composer name of the plugin.
      *
      * @var string
      */
     const DEFAULT_PLUGIN_SLUG = 'plugin-name';
 
     /**
-     * The boilerplate description in the plugin entry file
+     * The boilerplate description in the plugin entry file.
      *
      * @var string
      */
     const DEFAULT_PLUGIN_DESCRIPTION = 'Description: A description of this plugin';
 
     /**
-     * The boilerplate composer description
+     * The boilerplate composer description.
      *
      * @var string
      **/
     const DEFAULT_COMPOSER_DESCRIPTION = '"description": "A description of this plugin",';
 
     /**
-     * The boilerplate plugin URI
+     * The boilerplate plugin URI.
      *
      * @var string
      **/
     const DEFAULT_PLUGIN_URI = 'Plugin URI: http://plugin.com.au';
 
     /**
-     * The boilerplate Author name in the plugin file
+     * The boilerplate Author name in the plugin file.
      *
      * @var string
      **/
     const DEFAULT_PLUGIN_AUTHOR = 'Author: My Name';
 
     /**
-     * The boilerplate composer author
+     * The boilerplate composer author.
      *
      * @var string
      **/
     const DEFAULT_COMPOSER_AUTHOR = '"name": "My Name",';
 
     /**
-     * The boilerplate plugin author URI
+     * The boilerplate plugin author URI.
      *
      * @var string
      **/
@@ -137,7 +135,7 @@ class NewCommand extends Command
 
         // Get the plugin slug
         $defaultSlug = $this->slugify($this->pluginName);
-        $question = new Question('Enter plugin slug (default "<comment>' . $defaultSlug . '</comment>"): ', $defaultSlug);
+        $question = new Question('Enter plugin slug (default "<comment>'.$defaultSlug.'</comment>"): ', $defaultSlug);
         $question->setAutocompleterValues([$defaultSlug]);
         $this->pluginSlug = $questionHelper->ask($input, $this->output, $question);
 
@@ -145,7 +143,7 @@ class NewCommand extends Command
 
         // Get the plugin namespace
         $defaultNamespace = str_replace(' ', '\\', ucwords($this->pluginName));
-        $question = new Question('Enter plugin namespace (default "<comment>' . $defaultNamespace . '</comment>"): ', $defaultNamespace);
+        $question = new Question('Enter plugin namespace (default "<comment>'.$defaultNamespace.'</comment>"): ', $defaultNamespace);
         $question->setAutocompleterValues([$defaultNamespace]);
         $this->pluginNamespace = $questionHelper->ask($input, $this->output, $question);
 
@@ -202,51 +200,51 @@ class NewCommand extends Command
         );
 
         // Rename plugin.php to slug
-        $this->pluginFilename = $this->pluginSlug . '.php';
-        $this->pluginFile = $this->pluginSlug . '/' . $this->pluginFilename;
-        $this->rename($this->pluginSlug . '/' . self::DEFAULT_PLUGIN_FILENAME, $this->pluginFile);
+        $this->pluginFilename = $this->pluginSlug.'.php';
+        $this->pluginFile = $this->pluginSlug.'/'.$this->pluginFilename;
+        $this->rename($this->pluginSlug.'/'.self::DEFAULT_PLUGIN_FILENAME, $this->pluginFile);
 
         // Change name of plugin in plugin file
-        $this->replaceStringWithAnotherInFile(self::DEFAULT_PLUGIN_NAME,  $this->pluginName, $this->pluginFile);
+        $this->replaceStringWithAnotherInFile(self::DEFAULT_PLUGIN_NAME, $this->pluginName, $this->pluginFile);
 
         // Change plugin URI in plugin file
         // TODO Collect plugin URI from user
-        $this->replaceStringWithAnotherInFile(self::DEFAULT_PLUGIN_URI, 'Plugin URI: ' . $this->pluginUri, $this->pluginFile);
+        $this->replaceStringWithAnotherInFile(self::DEFAULT_PLUGIN_URI, 'Plugin URI: '.$this->pluginUri, $this->pluginFile);
 
         // Change plugin description in plugin file
         // TODO Collect plugin description from user
-        $this->replaceStringWithAnotherInFile(self::DEFAULT_PLUGIN_DESCRIPTION, 'Description: ' . $this->pluginDescription, $this->pluginFile);
+        $this->replaceStringWithAnotherInFile(self::DEFAULT_PLUGIN_DESCRIPTION, 'Description: '.$this->pluginDescription, $this->pluginFile);
 
         // Change plugin author in plugin file
         // TODO Collect plugin author from user
-        $this->replaceStringWithAnotherInFile(self::DEFAULT_PLUGIN_AUTHOR, 'Author: ' . $this->pluginAuthor, $this->pluginFile);
+        $this->replaceStringWithAnotherInFile(self::DEFAULT_PLUGIN_AUTHOR, 'Author: '.$this->pluginAuthor, $this->pluginFile);
 
         // Change plugin author URI in plugin file
         // TODO Collect plugin author URI from user
-        $this->replaceStringWithAnotherInFile(self::DEFAULT_PLUGIN_AUTHOR_URI, 'Author URI: ' . $this->pluginAuthorUri, $this->pluginFile);
+        $this->replaceStringWithAnotherInFile(self::DEFAULT_PLUGIN_AUTHOR_URI, 'Author URI: '.$this->pluginAuthorUri, $this->pluginFile);
 
         // Change plugin class namespace in plugin file
         $this->replaceStringWithAnotherInFile(self::DEFAULT_PLUGIN_NAMESPACE, $this->pluginNamespace, $this->pluginFile);
 
         // Change namespace in plugin class
-        $this->pluginClass = $this->pluginSlug . '/app/Plugin.php';
+        $this->pluginClass = $this->pluginSlug.'/app/Plugin.php';
         $this->replaceStringWithAnotherInFile(self::DEFAULT_PLUGIN_NAMESPACE, $this->pluginNamespace, $this->pluginClass);
 
         // Change vendor name in composer.json
         // TODO Collect vendor name from user
 
         // Change plugin name in composer.json
-        $this->composerJson = $this->pluginSlug . '/composer.json';
+        $this->composerJson = $this->pluginSlug.'/composer.json';
         $this->replaceStringWithAnotherInFile(self::DEFAULT_PLUGIN_SLUG, $this->pluginSlug, $this->composerJson);
 
         // Change plugin description in composer.json
         // TODO (pending collection of description)
-        $this->replaceStringWithAnotherInFile(self::DEFAULT_COMPOSER_DESCRIPTION, '"description": "' . $this->pluginDescription . '",', $this->composerJson);
+        $this->replaceStringWithAnotherInFile(self::DEFAULT_COMPOSER_DESCRIPTION, '"description": "'.$this->pluginDescription.'",', $this->composerJson);
 
         // Change author name in plugin description
         // TODO (pending collection of author name)
         // "name": "My Name",
-        $this->replaceStringWithAnotherInFile(self::DEFAULT_COMPOSER_AUTHOR, '"name": "' . $this->pluginAuthor . '",', $this->composerJson);
+        $this->replaceStringWithAnotherInFile(self::DEFAULT_COMPOSER_AUTHOR, '"name": "'.$this->pluginAuthor.'",', $this->composerJson);
 
         // Change author email in plugin description
         // TODO Collect author email from user
@@ -262,20 +260,20 @@ class NewCommand extends Command
         // TODO collect wordpress path from user
 
         // Change plugin path in .env file
-        $this->envFile = $this->pluginSlug . '/.env';
+        $this->envFile = $this->pluginSlug.'/.env';
         $this->replaceStringWithAnotherInFile(self::DEFAULT_PLUGIN_DIRECTORY, realpath($this->pluginSlug), $this->envFile);
 
         // Change plugin filename in .env file
         $this->replaceStringWithAnotherInFile(self::DEFAULT_PLUGIN_FILENAME, $this->pluginFilename, $this->envFile);
 
         // Change plugin path in tests/bootstrap
-        $this->replaceStringWithAnotherInFile(self::DEFAULT_PLUGIN_FILENAME, $this->pluginFilename, $this->pluginSlug . '/tests/bootstrap.php');
+        $this->replaceStringWithAnotherInFile(self::DEFAULT_PLUGIN_FILENAME, $this->pluginFilename, $this->pluginSlug.'/tests/bootstrap.php');
 
         // Change plugin namespace in test case constructor
-        $this->replaceStringWithAnotherInFile(self::DEFAULT_PLUGIN_NAMESPACE, $this->pluginNamespace, $this->pluginSlug . '/tests/TestCase.php');
+        $this->replaceStringWithAnotherInFile(self::DEFAULT_PLUGIN_NAMESPACE, $this->pluginNamespace, $this->pluginSlug.'/tests/TestCase.php');
 
         // Change plugin namespace for Arc CLI
-        $this->replaceStringWithAnotherInFile(self::DEFAULT_PLUGIN_NAMESPACE, $this->pluginNamespace, $this->pluginSlug . '/arc');
+        $this->replaceStringWithAnotherInFile(self::DEFAULT_PLUGIN_NAMESPACE, $this->pluginNamespace, $this->pluginSlug.'/arc');
 
         $this->info('Plugin ready! Build something adequate!');
     }
@@ -338,7 +336,7 @@ class NewCommand extends Command
      */
     protected function extract($zipFile, $directory = '.')
     {
-        $archive = new ZipArchive;
+        $archive = new ZipArchive();
 
         $archive->open($zipFile);
 
@@ -396,17 +394,17 @@ class NewCommand extends Command
     }
 
     /**
-     * Get the name of the directory which the archive extracts to
+     * Get the name of the directory which the archive extracts to.
      *
      * @return string
      */
     protected function getArchiveDirectoryName()
     {
-        return 'plugin-' . pathinfo($this->archiveName, PATHINFO_FILENAME);
+        return 'plugin-'.pathinfo($this->archiveName, PATHINFO_FILENAME);
     }
 
     /**
-     * Rename the directory
+     * Rename the directory.
      *
      * @param string $originalName the name of the directory to rename
      * @param string $newName      the new name for the directory
@@ -415,22 +413,23 @@ class NewCommand extends Command
      */
     protected function rename($originalName, $newName)
     {
-        rename(getcwd() . '/' . $originalName, $newName);
+        rename(getcwd().'/'.$originalName, $newName);
+
         return $this;
     }
 
     /**
-     * Get the directory of the plugin files
+     * Get the directory of the plugin files.
      *
      * @return string
      */
     protected function getDirectory()
     {
-        return getcwd() . '/' . $this->slug;
+        return getcwd().'/'.$this->slug;
     }
 
     /**
-     * Convert the given namespace string to a slug
+     * Convert the given namespace string to a slug.
      *
      * @param string $title     the name to convert to a slug
      * @param string $separator the character to use to separate the slug words
@@ -454,7 +453,7 @@ class NewCommand extends Command
     }
 
     /**
-     * Output the given message to the console as a comment message
+     * Output the given message to the console as a comment message.
      *
      * @param string $message the message to pass to output
      *
@@ -466,7 +465,7 @@ class NewCommand extends Command
     }
 
     /**
-     * Output the given message to the console as an info message
+     * Output the given message to the console as an info message.
      *
      * @param string $message the message to pass to output
      *
@@ -478,20 +477,20 @@ class NewCommand extends Command
     }
 
     /**
-     * Output the given message to the console with the given class
+     * Output the given message to the console with the given class.
      *
      * @param string $message the message to pass to output
      * @param string $class   the class of message to output
      *
      * @return void
      **/
-    protected function output($message, $class = "info")
+    protected function output($message, $class = 'info')
     {
         $this->output->writeln("<$class>$message</$class>");
     }
 
     /**
-     * Replaces all instances of the given string with another string in the file at the given path
+     * Replaces all instances of the given string with another string in the file at the given path.
      *
      * @param string $string   String to be replaced
      * @param string $another  String to be replaced with
