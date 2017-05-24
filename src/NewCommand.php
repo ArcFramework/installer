@@ -38,7 +38,22 @@ class NewCommand extends Command
      * The boilerplate namespace of the plugin
      * @var string
      **/
+    
+    const PLUGIN_SLUG = 'plugin-name';
+
     const PLUGIN_NAMESPACE = 'Vendor\PluginName';
+
+    const DEF_PLUGIN_DESCRIPTION = 'Description: A description of this plugin';
+
+    const DEF_COMPOSER_DESCRIPTION = '"description": "A description of this plugin",';
+
+    const DEF_PLUGIN_URI = 'Plugin URI: http://plugin.com.au';
+
+    const DEF_PLUGIN_AUTHOR = 'Author: My Name';
+
+    const DEF_COMPOSER_AUTHOR = '"name": "My Name",';
+
+    const DEF_PLUGIN_AUTHOR_URI = 'Author URI: http://myname.com.au';
 
     protected $archiveName;
     protected $pluginName;
@@ -95,6 +110,22 @@ class NewCommand extends Command
         $question->setAutocompleterValues([$defaultNamespace]);
         $this->pluginNamespace = $questionHelper->ask($input, $this->output, $question);
 
+        //get the plugin URI
+        $question = new Question('Enter plugin URI (default <comment>""</comment>): ', '');
+        $this->pluginUri = $questionHelper->ask($input, $this->output, $question);
+        
+        //get the plugin description
+        $question = new Question('Enter plugin description (default <comment>""</comment>): ', '');
+        $this->pluginDescription = $questionHelper->ask($input, $this->output, $question);
+
+        //get the plugin author
+        $question = new Question('Enter plugin author (default <comment>""</comment>): ', '');
+        $this->pluginAuthor = $questionHelper->ask($input, $this->output, $question);
+
+        //get the plugin author uri
+        $question = new Question('Enter plugin author URI (default <comment>""</comment>): ', '');
+        $this->pluginAuthorUri = $questionHelper->ask($input, $this->output, $question);
+
         $this->info('Building plugin...');
 
         $version = $this->getVersion($input);
@@ -134,17 +165,21 @@ class NewCommand extends Command
         // Change name of plugin in plugin file
         $this->replaceStringWithAnotherInFile(self::PLUGIN_NAME,  $this->pluginName, $this->pluginFile);
 
-        // Change plugin URI in plugin file
+       // Change plugin URI in plugin file
         // TODO Collect plugin URI from user
+        $this->replaceStringWithAnotherInFile(self::DEF_PLUGIN_URI, 'Plugin URI: ' . $this->pluginUri, $this->pluginFile);
 
         // Change plugin description in plugin file
         // TODO Collect plugin description from user
+        $this->replaceStringWithAnotherInFile(self::DEF_PLUGIN_DESCRIPTION, 'Description: ' . $this->pluginDescription, $this->pluginFile);
 
         // Change plugin author in plugin file
         // TODO Collect plugin author from user
+        $this->replaceStringWithAnotherInFile(self::DEF_PLUGIN_AUTHOR, 'Author: ' . $this->pluginAuthor, $this->pluginFile);
 
         // Change plugin author URI in plugin file
         // TODO Collect plugin author URI from user
+        $this->replaceStringWithAnotherInFile(self::DEF_PLUGIN_AUTHOR_URI, 'Author URI: ' . $this->pluginAuthorUri, $this->pluginFile);
 
         // Change plugin class namespace in plugin file
         $this->replaceStringWithAnotherInFile(self::PLUGIN_NAMESPACE, $this->pluginNamespace, $this->pluginFile);
@@ -162,9 +197,12 @@ class NewCommand extends Command
 
         // Change plugin description in composer.json
         // TODO (pending collection of description)
+        $this->replaceStringWithAnotherInFile(self::DEF_COMPOSER_DESCRIPTION, '"description": "' . $this->pluginDescription . '",', $this->composerJson);
 
         // Change author name in plugin description
         // TODO (pending collection of author name)
+        // "name": "My Name",
+        $this->replaceStringWithAnotherInFile(self::DEF_COMPOSER_AUTHOR, '"name": "' . $this->pluginAuthor . '",', $this->composerJson);
 
         // Change author email in plugin description
         // TODO Collect author email from user
