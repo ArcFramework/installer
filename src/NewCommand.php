@@ -268,6 +268,9 @@ class NewCommand extends Command
         // Change plugin namespace for Arc CLI
         $this->replaceStringWithAnotherInFile(self::DEFAULT_PLUGIN_NAMESPACE, $this->pluginNamespace, $this->pluginSlug.'/arc');
 
+        // CD into the plugin directory and clear composer autoload cache
+        shell_exec('cd '.$this->pluginSlug.'; '. $this->findComposer().' dump-autoload');
+
         $this->info('Plugin ready! Build something adequate!');
     }
 
