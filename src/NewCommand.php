@@ -208,19 +208,15 @@ class NewCommand extends Command
         $this->replaceStringWithAnotherInFile(self::DEFAULT_PLUGIN_NAME, $this->pluginName, $this->pluginFile);
 
         // Change plugin URI in plugin file
-        // TODO Collect plugin URI from user
         $this->replaceStringWithAnotherInFile(self::DEFAULT_PLUGIN_URI, 'Plugin URI: '.$this->pluginUri, $this->pluginFile);
 
         // Change plugin description in plugin file
-        // TODO Collect plugin description from user
         $this->replaceStringWithAnotherInFile(self::DEFAULT_PLUGIN_DESCRIPTION, 'Description: '.$this->pluginDescription, $this->pluginFile);
 
         // Change plugin author in plugin file
-        // TODO Collect plugin author from user
         $this->replaceStringWithAnotherInFile(self::DEFAULT_PLUGIN_AUTHOR, 'Author: '.$this->pluginAuthor, $this->pluginFile);
 
         // Change plugin author URI in plugin file
-        // TODO Collect plugin author URI from user
         $this->replaceStringWithAnotherInFile(self::DEFAULT_PLUGIN_AUTHOR_URI, 'Author URI: '.$this->pluginAuthorUri, $this->pluginFile);
 
         // Change plugin class namespace in plugin file
@@ -238,12 +234,9 @@ class NewCommand extends Command
         $this->replaceStringWithAnotherInFile(self::DEFAULT_PLUGIN_SLUG, $this->pluginSlug, $this->composerJson);
 
         // Change plugin description in composer.json
-        // TODO (pending collection of description)
         $this->replaceStringWithAnotherInFile(self::DEFAULT_COMPOSER_DESCRIPTION, '"description": "'.$this->pluginDescription.'",', $this->composerJson);
 
         // Change author name in plugin description
-        // TODO (pending collection of author name)
-        // "name": "My Name",
         $this->replaceStringWithAnotherInFile(self::DEFAULT_COMPOSER_AUTHOR, '"name": "'.$this->pluginAuthor.'",', $this->composerJson);
 
         // Change author email in plugin description
