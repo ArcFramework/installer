@@ -33,7 +33,7 @@ class NewCommand extends Command
      *
      * @var string
      **/
-    const DEAFAULT_PLUGIN_NAME = 'My Plugin Name';
+    const DEFAULT_PLUGIN_NAME = 'My Plugin Name';
 
     /**
      * The boilerplate namespace of the plugin.
