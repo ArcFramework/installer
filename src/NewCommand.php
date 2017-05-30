@@ -147,19 +147,19 @@ class NewCommand extends Command
         $question->setAutocompleterValues([$defaultNamespace]);
         $this->pluginNamespace = $questionHelper->ask($input, $this->output, $question);
 
-        //get the plugin URI
+        // Get the plugin URI
         $question = new Question('Enter plugin URI (default <comment>""</comment>): ', '');
         $this->pluginUri = $questionHelper->ask($input, $this->output, $question);
 
-        //get the plugin description
+        // Get the plugin description
         $question = new Question('Enter plugin description (default <comment>""</comment>): ', '');
         $this->pluginDescription = $questionHelper->ask($input, $this->output, $question);
 
-        //get the plugin author
+        // Get the plugin author
         $question = new Question('Enter plugin author (default <comment>""</comment>): ', '');
         $this->pluginAuthor = $questionHelper->ask($input, $this->output, $question);
 
-        //get the plugin author uri
+        // Get the plugin author uri
         $question = new Question('Enter plugin author URI (default <comment>""</comment>): ', '');
         $this->pluginAuthorUri = $questionHelper->ask($input, $this->output, $question);
 
@@ -269,6 +269,10 @@ class NewCommand extends Command
         $this->replaceStringWithAnotherInFile(self::DEFAULT_PLUGIN_NAMESPACE, $this->pluginNamespace, $this->pluginSlug.'/arc');
         $this->replaceStringWithAnotherInFile(self::DEFAULT_PLUGIN_FILENAME, $this->pluginFilename, $this->pluginSlug.'/arc');
 
+        // Change plugin namespace and filename for TestCase
+        $this->replaceStringWithAnotherInFile(self::DEFAULT_PLUGIN_NAMESPACE, $this->pluginNamespace, $this->pluginSlug.'/tests/TestCase.php');
+        $this->replaceStringWithAnotherInFile(self::DEFAULT_PLUGIN_FILENAME, $this->pluginFilename, $this->pluginSlug.'/tests/TestCase.php'); 
+ 
         // CD into the plugin directory and clear composer autoload cache
         shell_exec('cd '.$this->pluginSlug.'; '.$this->findComposer().' dump-autoload');
 
