@@ -272,7 +272,7 @@ class NewCommand extends Command
         // Change plugin namespace and filename for TestCase
         $this->replaceStringWithAnotherInFile(self::DEFAULT_PLUGIN_NAMESPACE, $this->pluginNamespace, $this->pluginSlug.'/tests/TestCase.php');
         $this->replaceStringWithAnotherInFile(self::DEFAULT_PLUGIN_FILENAME, $this->pluginFilename, $this->pluginSlug.'/tests/TestCase.php');
-        
+
         // Change plugin namespace in base controller
         $this->replaceStringWithAnotherInFile(self::DEFAULT_PLUGIN_NAMESPACE, $this->pluginNamespace, $this->pluginSlug.'/app/Http/Controllers/Controller.php');
 
