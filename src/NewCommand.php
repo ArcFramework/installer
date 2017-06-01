@@ -277,11 +277,13 @@ class NewCommand extends Command
         $this->replaceStringWithAnotherInFile(self::DEFAULT_PLUGIN_NAMESPACE, $this->pluginNamespace, $this->pluginSlug.'/app/Http/Controllers/Controller.php');
 
         // Change plugin namespace in service providers
+        $this->replaceStringWithAnotherInFile(self::DEFAULT_PLUGIN_NAMESPACE, $this->pluginNamespace, $this->pluginSlug.'/app/Providers/AppServiceProvider.php');
         $this->replaceStringWithAnotherInFile(self::DEFAULT_PLUGIN_NAMESPACE, $this->pluginNamespace, $this->pluginSlug.'/app/Providers/RouteServiceProvider.php');
         $this->replaceStringWithAnotherInFile(self::DEFAULT_PLUGIN_NAMESPACE, $this->pluginNamespace, $this->pluginSlug.'/app/Providers/WordpressServiceProvider.php');
 
         // Change plugin namespace in config files
         $this->replaceStringWithAnotherInFile(self::DEFAULT_PLUGIN_NAMESPACE, $this->pluginNamespace, $this->pluginSlug.'/config/app.php');
+        $this->replaceStringWithAnotherInFile(self::DEFAULT_PLUGIN_NAMESPACE, $this->pluginNamespace, $this->pluginSlug.'/config/wordpress.php');
 
         // CD into the plugin directory and clear composer autoload cache
         shell_exec('cd '.$this->pluginSlug.'; '.$this->findComposer().' dump-autoload');
